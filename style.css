@@ -1,0 +1,413 @@
+/* BLUETOOTH SPEAKER UI - KORRIGIERTE CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+    background: #0f1525;
+    background: linear-gradient(135deg, #0a0e1a 0%, #1a2332 100%);
+    color: #e0e0e0;
+    min-height: 100vh;
+    padding: 20px;
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* HEADER */
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #2d8cff;
+}
+
+header h1 {
+    color: #2d8cff;
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #8a9bb2;
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+/* SPEAKER DISPLAY - WICHTIGSTER TEIL */
+.speaker-display {
+    background: rgba(20, 25, 40, 0.9);
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.display-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto 30px auto;
+    background: rgba(10, 15, 25, 0.9);
+    border-radius: 15px;
+    border: 2px solid #2a3a5a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ====== DIE KREISE - HIER LIEGT DAS PROBLEM! ====== */
+.circle {
+    width: 80px;
+    height: 80px;
+    background-color: #3a4a6a;  /* Dunkel für AUS */
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 15px rgba(58, 74, 106, 0.5);
+    z-index: 10;
+}
+
+/* EINGESCHALTET: Großer blauer Kreis */
+.circle.on {
+    width: 180px !important;
+    height: 180px !important;
+    background-color: #2d8cff !important;  /* Hellblau */
+    box-shadow: 
+        0 0 25px rgba(45, 140, 255, 0.7),
+        inset 0 0 30px rgba(100, 180, 255, 0.3) !important;
+}
+
+/* PULSIEREND bei Verbindung */
+.circle.pulsing {
+    animation: pulseAnimation 1.5s infinite ease-in-out !important;
+}
+
+@keyframes pulseAnimation {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        box-shadow: 
+            0 0 25px rgba(45, 140, 255, 0.7),
+            inset 0 0 30px rgba(100, 180, 255, 0.3);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.08);
+        box-shadow: 
+            0 0 35px rgba(45, 140, 255, 0.9),
+            inset 0 0 40px rgba(100, 180, 255, 0.5);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        box-shadow: 
+            0 0 25px rgba(45, 140, 255, 0.7),
+            inset 0 0 30px rgba(100, 180, 255, 0.3);
+    }
+}
+
+/* ====== VERBINDUNGSPUNKTE ====== */
+.connection-dots {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 20;
+}
+
+/* Sichtbar während Suche */
+.connection-dots.searching {
+    opacity: 1 !important;
+}
+
+.connection-dots .dot {
+    width: 16px;
+    height: 16px;
+    background-color: #ffa726;  /* Orange */
+    border-radius: 50%;
+    animation: dotPulse 1.2s infinite ease-in-out;
+}
+
+.connection-dots .dot:nth-child(1) { animation-delay: 0s; }
+.connection-dots .dot:nth-child(2) { animation-delay: 0.2s; }
+.connection-dots .dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dotPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+}
+
+/* STATUSTEXT */
+.status-text {
+    position: absolute;
+    top: 25px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+}
+
+/* KONTROLLELEMENTE */
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    min-width: 180px;
+}
+
+.btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #00c853, #64dd17);
+    color: white;
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #ff3d00, #ff9100);
+    color: white;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #2979ff, #00b0ff);
+    color: white;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #ff9100, #ffd600);
+    color: #333;
+}
+
+/* AUDIO KONTROLLE */
+.audio-controls {
+    background: rgba(30, 35, 50, 0.8);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 25px;
+    border-left: 4px solid #9c27b0;
+}
+
+.audio-controls h3 {
+    color: #bb86fc;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.audio-option {
+    margin-bottom: 15px;
+}
+
+.audio-option label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+input[type="range"] {
+    width: 100%;
+    margin-top: 5px;
+    height: 6px;
+    background: #2a3a5a;
+    border-radius: 3px;
+    outline: none;
+}
+
+/* STATUS PANEL */
+.status-panel {
+    background: rgba(20, 25, 40, 0.9);
+    border-radius: 15px;
+    padding: 25px;
+    margin-top: 30px;
+}
+
+.status-panel h2 {
+    color: #2d8cff;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.status-item {
+    margin-bottom: 25px;
+}
+
+.status-item h3 {
+    color: #4caf50;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.status-list {
+    list-style: none;
+    padding-left: 5px;
+}
+
+.status-list li {
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    background: rgba(40, 45, 60, 0.5);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.status-indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.indicator-off { background-color: #3a4a6a; }
+.indicator-on { background-color: #2d8cff; }
+.indicator-searching { background-color: #ffa726; }
+.indicator-connected { background-color: #4caf50; }
+
+/* LOG */
+.log {
+    background: rgba(15, 20, 35, 0.8);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 25px;
+    border-top: 2px solid #ffa726;
+}
+
+.log h3 {
+    color: #ffa726;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.log-entries {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.log-entry {
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    background: rgba(45, 140, 255, 0.1);
+    border-radius: 6px;
+    border-left: 3px solid #2d8cff;
+    font-size: 0.9rem;
+    font-family: 'Consolas', monospace;
+}
+
+.log-entry:nth-child(even) {
+    background: rgba(255, 167, 38, 0.1);
+    border-left-color: #ffa726;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #2a3a5a;
+    color: #8a9bb2;
+    font-size: 0.9rem;
+}
+
+/* DEBUG HILFE - NUR FÜR PROBLEME AKTIVIEREN */
+.debug-mode .circle {
+    border: 2px solid red !important;
+}
+
+.debug-mode .display-container {
+    border: 2px solid lime !important;
+}
+
+.debug-mode .connection-dots {
+    border: 2px solid yellow !important;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .display-container {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .circle.on {
+        width: 150px !important;
+        height: 150px !important;
+    }
+    
+    .controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn {
+        width: 100%;
+        max-width: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+    
+    header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .display-container {
+        width: 220px;
+        height: 220px;
+    }
+}
